@@ -117,11 +117,20 @@ def addThreeLevelCacheHierarchy(self, ic, dc, l3c, iwc = None, dwc = None):
 ```python
 parser.add_option("--l3cache", action="store_true")
 ```
-# Config last level cache to 2-way associative cache and test performance
+# (Q3) Config last level cache to 2-way and full-way associative cache and test performance
+
+使用指令編譯./quicksort.c產生./quicksort
+```
+gcc --static quicksort.c -o quicksort
+```
+因為將array大小設成100000效果不佳，所以更改成1000000
+
+
+Config last level cache to 2-way associative cache and test performance
 ```
 ./build/X86/gem5.opt configs/example/se.py -c ./quicksort --cpu-type=TimingSimpleCPU --caches --l2cache --l3cache --l3_assoc=2 --l1i_size=32kB --l1d_size=32kB --l2_size=128kB --l3_size=1MB --mem-type=NVMainMemory --nvmain-config=../NVmain/Config/PCM_ISSCC_2012_4GB.config
 ```
-# Config last level cache to full-way associative cache and test performance
+Config last level cache to full-way associative cache and test performance(--l3_assoc改成1)
 ```
 ./build/X86/gem5.opt configs/example/se.py -c ./quicksort --cpu-type=TimingSimpleCPU --caches --l2cache --l3cache --l3_assoc=16384 --l1i_size=32kB --l1d_size=32kB --l2_size=128kB --l3_size=1MB --mem-type=NVMainMemory --nvmain-config=../NVmain/Config/PCM_ISSCC_2012_4GB.config
 
