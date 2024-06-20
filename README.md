@@ -35,7 +35,7 @@ else:
 修改後
 ```python
 else:
-        dcache_class, icache_class, l2_cache_class, walk_cache_class = \
+        dcache_class, icache_class, l2_cache_class, walk_cache_class, l3_cache_class = \
             L1_DCache, L1_ICache, L2Cache,None, L3Cache
 ```
 同樣在CacheConfig.py找到下面這段並增加options.l3cache
