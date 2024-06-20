@@ -113,6 +113,10 @@ def addThreeLevelCacheHierarchy(self, ic, dc, l3c, iwc = None, dwc = None):
         self.toL2Bus.master = self.l3cache.cpu_side
         self._cached_ports = ['l3cache.mem_side']
 ```
+修改Option.py，將下面程式碼加到# Cache Options下
+```python
+parser.add_option("--l3cache", action="store_true")
+```
 # Config last level cache to 2-way associative cache and test performance
 ```
 ./build/X86/gem5.opt configs/example/se.py -c ./quicksort --cpu-type=TimingSimpleCPU --caches --l2cache --l3cache --l3_assoc=2 --l1i_size=32kB --l1d_size=32kB --l2_size=128kB --l3_size=1MB --mem-type=NVMainMemory --nvmain-config=../NVmain/Config/PCM_ISSCC_2012_4GB.config
