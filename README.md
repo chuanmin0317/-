@@ -103,7 +103,7 @@ class L3XBar(CoherentXBar):
 ```python
 from XBar import L3XBar
 ```
-在class BaseCPU中加入
+修改BaseCPU.py，在class BaseCPU中加入
 ```python
 def addThreeLevelCacheHierarchy(self, ic, dc, l3c, iwc = None, dwc = None):
         self.addPrivateSplitL1Caches(ic, dc, iwc, dwc)
