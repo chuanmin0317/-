@@ -123,7 +123,7 @@ parser.add_option("--l3cache", action="store_true")
 ```
 gcc --static quicksort.c -o quicksort
 ```
-因為將array大小設成100000效果不佳，所以更改成1000000
+**因為將array大小設成100000效果不佳，所以更改成1000000**
 
 
 Config last level cache to 2-way associative cache and test performance
