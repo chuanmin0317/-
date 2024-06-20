@@ -143,3 +143,37 @@ replacement_policy = Param.BaseReplacementPolicy(LFURP(),"Replacement policy")
 ```
 ./build/X86/gem5.opt configs/example/se.py -c ./quicksort --cpu-type=TimingSimpleCPU --caches --l2cache --l3cache --l1i_size=32kB --l1d_size=32kB --l2_size=128kB --l3_size=1MB --mem-type=NVMainMemory --nvmain-config=../NVmain/Config/PCM_ISSCC_2012_4GB.config
 ```
+# (Q5) Test the performance of write back and write through policy based on 4-way associative cache with isscc_pcm
+在./src/mem/cache/base.cc找到下面這段並修改
+```C
+else if (blk && (pkt->needsWritable() ? blk->isWritable() :
+                       blk->isReadable())) {
+        // OK to satisfy access
+        incHitCount(pkt);
+        satisfyRequest(pkt, blk);
+        maintainClusivity(pkt->fromCache(), blk);
+
+        return true;
+    }
+```
+修改後
+```C
+else if (blk && (pkt->needsWritable() ? blk->isWritable() :
+                       blk->isReadable())) {
+        // OK to satisfy access
+        incHitCount(pkt);
+        satisfyRequest(pkt, blk);
+        maintainClusivity(pkt->fromCache(), blk);
+	
+        if (blk ->isWritable()){
+	    PacketPtr  writeCleanPkt = writecleanBlk(blk, pkt->req->getDest(), pkt->id);
+	    writebacks.push_back(writeCleanPkt);
+	}
+
+        return true;
+    }
+```
+跑multiply
+```
+./build/X86/gem5.opt configs/example/se.py -c ./multiply --cpu-type=TimingSimpleCPU --caches --l2cache --l3cache --l3_assoc=4 --l1i_size=32kB --l1d_size=32kB --l2_size=128kB --l3_size=1MB --mem-type=NVMainMemory --nvmain-config=../NVmain/Config/PCM_ISSCC_2012_4GB.config
+```
